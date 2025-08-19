@@ -4,7 +4,7 @@
 #
 .utmp/
 library
-/[Tt]emp/
+temp
 /[Oo]bj/
 /[Bb]uild/
 /[Bb]uilds/
