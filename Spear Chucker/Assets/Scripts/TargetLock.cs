@@ -71,7 +71,7 @@ public class TargetLock : MonoBehaviour
 
         // Show or hide the aim icon depending on lock-on state
         if (aimIcon)
-            aimIcon.gameObject.SetActive(isTargeting);
+        aimIcon.gameObject.SetActive(isTargeting);
 
         // Send our calculated input values to Cinemachine
         cinemachineFreeLook.m_XAxis.m_InputAxisValue = mouseX;
@@ -118,7 +118,7 @@ public class TargetLock : MonoBehaviour
 
         // Move the aim icon to target’s screen position
         if (aimIcon)
-            aimIcon.transform.position = mainCamera.WorldToScreenPoint(target.position);
+        aimIcon.transform.position = mainCamera.WorldToScreenPoint(target.position);
 
         // Stop adjusting if player is too close to the target
         if ((target.position - transform.position).magnitude < minDistance) return;
