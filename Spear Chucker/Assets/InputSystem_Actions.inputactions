@@ -87,7 +87,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "New action",
+                    "name": "TargetLock",
                     "type": "Button",
                     "id": "5afe0356-7969-4c2f-9402-8a331aadb037",
                     "expectedControlType": "",
@@ -485,11 +485,22 @@
                 {
                     "name": "",
                     "id": "0da7a85f-fc1a-4afa-a2a7-fd9f9e5dcbd6",
-                    "path": "",
+                    "path": "<Mouse>/middleButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "New action",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "TargetLock",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "daa9f17c-9f17-4024-9c26-5db52087bd9e",
+                    "path": "<Gamepad>/rightStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "TargetLock",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
