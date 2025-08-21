@@ -3,10 +3,8 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Health : MonoBehaviour
-{
-    
+{ 
     public Image healthBar;
-    public Image[] healthPoints;
     float health, maxHealth = 100;
     private float lerpSpeed;
 
@@ -17,28 +15,29 @@ public class Health : MonoBehaviour
 
     void Update()
     {
-        
         if (health > maxHealth) health = maxHealth;
 
         lerpSpeed = 3f * Time.deltaTime;
 
         HealthBarFiller();
-        
+        ColorChanger();     
     }
 
     public void HealthBarFiller()
     {
-
-        for (int i = 0; i < healthPoints.Length; i++)
-        {
-            healthPoints[i].enabled = !DisplayHealthPoints(health, i);
-        }
+        healthBar.fillAmount = Mathf.Lerp(healthBar.fillAmount, health / maxHealth, lerpSpeed);
     }
 
-    public bool DisplayHealthPoints(float health, int pointNumber)
+    void ColorChanger()
     {
-        return ((pointNumber * 10) >= health);
+        Color healthColor = ColorChanger.Lerp(Color.red, Color.green, (health / maxHealth));
+        healthBar.color = healthColor;
     }
+
+    //public bool DisplayHealthPoints(float health, int pointNumber)
+    //{
+    //  return ((pointNumber * 10) >= health);
+    //}
 
     public void Damage(float damagePoints)
     {
@@ -56,7 +55,7 @@ public class Health : MonoBehaviour
     {
         if (health <= 0)
         {
-         SceneManager.LoadScene("Death Screen");
+         //SceneManager.LoadScene("Death Screen");
         }
     }
 }
