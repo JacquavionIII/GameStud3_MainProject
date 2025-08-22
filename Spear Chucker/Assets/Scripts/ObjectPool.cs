@@ -11,12 +11,15 @@ public class ObjectPool : MonoBehaviour
     public class Pool
     {
         public string tag;
-        public GameObect prefab;
+        public GameObject prefab;
         public int size;
     }
 
     public List<Pool> pools;
-    public Dictionary<string, Queue<GameObect>> poolDictionary;
+    public Dictionary<string, Queue<GameObject>> poolDictionary;
+    public string currentType;
+    public Transform shootLocation;
+    public float speed = 10f;
 
     void Awake()
     {
@@ -50,24 +53,13 @@ public class ObjectPool : MonoBehaviour
             return null;
         }
 
-        GameObject obectToSpawn = poolDictionary[tag].Dequeue();
-        obectToSpawn.SetActive(true);
-        obectToSpawn.transform.position = position;
-        obectToSpawn.transform.rotation = rotation;
+        GameObject objectToSpawn = poolDictionary[tag].Dequeue();
+        objectToSpawn.SetActive(true);
+        objectToSpawn.transform.position = position;
+        objectToSpawn.transform.rotation = rotation;
 
-        poolDictionary[tag].Enqueue(obectToSpawn);
-        return obectToSpawn;
-    }
-
-    public void Shoot()
-    {
-        //GameObect temp = Instantiate(prefab, shootLocation.position, Quaternion.identity);
-        //temp.GetComponent<Rigidbody>().LinearVelocity = new Vector3(speed, 0, 0);
-        //Destroy(temp, 2f);
-
-        GameObect temp = ObjectPool.Instance.SpawnFromPool(currentType, shootLocation.position, Quaternion.identity);
-        temp.GetComponent<Rigidbody>().linearVelocity = new Vector3(speed, 0, 0);
-        temp.GetComponent<ObjectController>().Spawned();
+        poolDictionary[tag].Enqueue(objectToSpawn);
+        return objectToSpawn;
     }
 
     void Update()
