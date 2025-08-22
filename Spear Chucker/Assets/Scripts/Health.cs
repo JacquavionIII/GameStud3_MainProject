@@ -3,10 +3,12 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Health : MonoBehaviour
-{ 
-    public Image healthBar;
+{
+    [SerializeField] private Material hpMaterial; //Reference for the Hpbar material.
     float health, maxHealth = 100;
     private float lerpSpeed;
+
+    private static readonly int FlowProperty = Shader.PropertyToID("_Flow"); //We're calling the shader property we want to change (the underscore is cause unity scripts list the shader thing like this).
 
     void Start()
     {
@@ -19,25 +21,18 @@ public class Health : MonoBehaviour
 
         lerpSpeed = 3f * Time.deltaTime;
 
-        HealthBarFiller();
-        ColorChanger();     
+        UpdateShaderBar();    
     }
 
-    public void HealthBarFiller()
+    private void UpdateShaderBar()
     {
-        healthBar.fillAmount = Mathf.Lerp(healthBar.fillAmount, health / maxHealth, lerpSpeed);
-    }
+        float targetValue = health / maxHealth;
 
-    void ColorChanger()
-    {
-        Color healthColor = Color.Lerp(Color.red, Color.green, (health / maxHealth));
-        healthBar.color = healthColor;
-    }
+        float currentValue = hpMaterial.GetFloat(FlowProperty);
+        float newValue = Mathf.Lerp(currentValue, targetValue, lerpSpeed);//makes the smooth transition between values for the hp bar
 
-    //public bool DisplayHealthPoints(float health, int pointNumber)
-    //{
-    //  return ((pointNumber * 10) >= health);
-    //}
+        hpMaterial.SetFloat(FlowProperty, newValue); //changes the value of the material so makes it go up or down
+    }
 
     public void Damage(float damagePoints)
     {
@@ -55,7 +50,8 @@ public class Health : MonoBehaviour
     {
         if (health <= 0)
         {
-         //SceneManager.LoadScene("Death Screen");
+            //SceneManager.LoadScene("Death Screen");
+            print("You should be dead here ig");
         }
     }
 }
