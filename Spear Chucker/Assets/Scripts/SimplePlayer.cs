@@ -40,7 +40,7 @@ public class SimplePlayer : MonoBehaviour
         else
             velocityVector = Vector3.zero;
 
-        rb.velocity = new Vector3(velocityVector.x, rb.velocity.y, velocityVector.z);
+        rb.linearVelocity = new Vector3(velocityVector.x, rb.linearVelocity.y, velocityVector.z);
     }
 }
 

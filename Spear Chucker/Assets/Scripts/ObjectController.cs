@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Pool;
 
@@ -10,10 +11,10 @@ public class ObjectController : MonoBehaviour
         StartCoroutine(Disable());
     }
 
-    IEnumerator Disable()
+    private IEnumerator Disable()
     {
         yield return new WaitForSeconds(2f);
-        this.gameObect.SetActive(false);
         this.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        this.gameObject.SetActive(false);
     }
 }
