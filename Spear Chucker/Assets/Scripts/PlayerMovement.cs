@@ -35,7 +35,9 @@ public class PlayerMovement : MonoBehaviour
     private InputAction moveAction;         // Input action for movement
     private InputAction lookAction;         // Input action for looking around
     private InputAction jumpAction;         // Input action for jumping
+    private InputAction healAction;         // Input action for healing
 
+    public Health health; // Reference to the player's health script
 
     void Awake()
     {
@@ -47,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
         moveAction = playerInput.actions["Move"];
         lookAction = playerInput.actions["Look"];
         jumpAction = playerInput.actions["Jump"];
+        healAction = playerInput.actions["Heal"];
     }
 
     void OnEnable()     // Subscribe to input actions when the script is enabled
@@ -61,6 +64,9 @@ public class PlayerMovement : MonoBehaviour
 
         jumpAction.Enable();
         jumpAction.performed += OnJump;
+
+        healAction.Enable();
+        healAction.performed += OnHeal;
     }
 
     void OnDisable()   // Unsubscribe from input actions when the script is disabled
@@ -72,6 +78,8 @@ public class PlayerMovement : MonoBehaviour
         lookAction.canceled -= OnLook;
 
         jumpAction.performed -= OnJump;
+
+        healAction.performed -= OnHeal;
     }
 
     // Called whenever Move input changes
@@ -91,7 +99,16 @@ public class PlayerMovement : MonoBehaviour
         if (context.performed && isGrounded)
         {
             // Jump velocity based on physics equation
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            velocity.y = Mathf.Sqrt(jumpHeight * 2f * gravity);
+        }
+    }
+
+    public void OnHeal(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            health.Heal(10); // Heal the player by 10 health points
+            Debug.Log("Heal action performed");
         }
     }
 
