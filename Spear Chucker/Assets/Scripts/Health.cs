@@ -4,11 +4,11 @@ using UnityEngine.SceneManagement;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] private Material hpMaterial; //Reference for the Hpbar material.
+    [SerializeField] public Material hpMaterial; //Reference for the Hpbar material.
     float health, maxHealth = 100;
     private float lerpSpeed;
 
-    private static readonly int FlowProperty = Shader.PropertyToID("_Flow"); //We're calling the shader property we want to change (the underscore is cause unity scripts list the shader thing like this).
+    public int FlowProperty = Shader.PropertyToID("_Flow"); //We're calling the shader property we want to change (the underscore is cause unity scripts list the shader thing like this).
 
     void Start()
     {
