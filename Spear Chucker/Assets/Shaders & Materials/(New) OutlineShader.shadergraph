@@ -774,13 +774,6 @@
 }
 
 {
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.Rendering.HighDefinition.ShaderGraph.HDFullscreenData",
-    "m_ObjectId": "3cb4a40d6f05429b835f290afc21f44a",
-    "m_ShowOnlyHDStencilBits": true
-}
-
-{
     "m_SGVersion": 3,
     "m_Type": "UnityEditor.ShaderGraph.Internal.ColorShaderProperty",
     "m_ObjectId": "416445b191944714b39a1b2ae8928d74",
@@ -1224,9 +1217,6 @@
         },
         {
             "m_Id": "231ed94eca584fb1bad92f966ee979af"
-        },
-        {
-            "m_Id": "3cb4a40d6f05429b835f290afc21f44a"
         }
     ],
     "m_CustomEditorGUI": "",
