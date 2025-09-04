@@ -412,10 +412,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   cameraTransform: {fileID: 8563346575428243932}
-  lookSensitivity: 3
+  lookSensitivity: 2
   smoothTime: 0.05
-  minLookY: -60
-  maxLookY: 60
+  minLookY: -15
+  maxLookY: 15
   rb: {fileID: 7318831341676055960}
   spearToss: {fileID: 6443076098641282819}
 --- !u!114 &6443076098641282819
