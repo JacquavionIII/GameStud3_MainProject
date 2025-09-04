@@ -17,7 +17,7 @@ public class TargetLock : MonoBehaviour
 
     public bool isTargeting;             // True if currently locked onto an enemy
     private float maxAngle = 90f;        // Maximum angle (in degrees) in front of the camera to detect enemies
-    private Transform currentTarget;     // The currently locked target
+    public Transform currentTarget;     // The currently locked target
 
     private PlayerInput playerInput;
     private InputAction targetLockAction;

@@ -77,7 +77,7 @@ Material:
     - _ExcludeFromTUAndAA: 0
     - _Metallic: 9.8
     - _OpaqueCullMode: 2
-    - _OutlineStrength: 100000
+    - _OutlineStrength: 1000000
     - _PerPixelSorting: 0
     - _RenderQueueType: 1
     - _Smoothness: 0.97
@@ -103,7 +103,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
-    - _BaseColour: {r: 0, g: 0, b: 0, a: 0}
+    - _BaseColour: {r: 0.41176474, g: 0.054901965, b: 0.06666667, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _Outline_Colour: {r: 1, g: 1, b: 1, a: 0}
