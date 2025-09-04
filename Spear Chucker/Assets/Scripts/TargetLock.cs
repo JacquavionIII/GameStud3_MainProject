@@ -1,134 +1,135 @@
 using UnityEngine;
-using Unity.Cinemachine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 public class TargetLock : MonoBehaviour
 {
-    [Header("Objects")]
+    [Header("References")]
     [SerializeField] private Camera mainCamera;                       // Reference to the main camera
-    [SerializeField] private CinemachineCamera cinemachineCamera;     // Cinemachine 3.x camera
-    [SerializeField] private CinemachineInputProvider inputProvider;    // Input provider for Cinemachine
-
-    [Header("UI")]
     [SerializeField] private Image aimIcon;                           // UI icon shown when a target is locked
 
     [Header("Settings")]
-    [SerializeField] private string enemyTag;                         // The tag used for enemies
+    [SerializeField] private string enemyTag = "Enemy";               // The tag used for enemies
     [SerializeField] private Vector2 targetLockOffset;                // Offset for fine-tuning the lock-on position
-    [SerializeField] private float minDistance;                       // Minimum distance to target before camera stops rotating
-    [SerializeField] private float maxDistance;                       // Maximum lock-on range
+    [SerializeField] private float minDistance = 2f;                  // Minimum distance to target before camera stops rotating
+    [SerializeField] private float maxDistance = 20f;                // Maximum distance to search for targets
+    [SerializeField] private float rotationSpeed = 5f;               // How fast the camera turns toward target        
 
     public bool isTargeting;             // True if currently locked onto an enemy
     private float maxAngle = 90f;        // Maximum angle (in degrees) in front of the camera to detect enemies
     private Transform currentTarget;     // The currently locked target
 
-    private Vector2 lookInput;           // Stores raw input from the player
-    private Vector2 overrideInput;       // Input override when targeting
-
-    private PlayerControls controls;     // Input actions reference
+    private PlayerInput playerInput;
+    private InputAction targetLockAction;
 
 
     private void Awake()
     {
-        controls = new PlayerControls();
-
-        // Subscribe to lock-on action
-        controls.Player.TargetLock.performed += ctx => AssignTarget();
-
-        // Subscribe to look action
-        controls.Player.Look.performed += ctx => OnLook(ctx.ReadValue<Vector2>());
-        controls.Player.Look.canceled += ctx => OnLook(Vector2.zero);
+        var playerInput = GetComponent<PlayerInput>();
+        targetLockAction = playerInput.actions["TargetLock"]; // Make sure this exists in your InputActions
     }
 
     private void OnEnable()
     {
-        controls.Player.Enable();
+        targetLockAction.Enable();
+        targetLockAction.performed += AssignTarget;
     }
 
     private void OnDisable()
     {
-        controls.Player.Disable();
+        targetLockAction.performed -= AssignTarget;
+        targetLockAction.canceled -= AssignTarget;
+
     }
 
     void Update()
     {
-        if (isTargeting)
+        if (isTargeting && currentTarget != null)
         {
-            NewInputTarget(currentTarget); // Override inputs if locked
+            LockCameraOnTarget();
+
+            //Move Ui aim icon
+            if (aimIcon)
+            {
+                aimIcon.gameObject.SetActive(true);
+                Vector3 screenPos = mainCamera.WorldToScreenPoint(currentTarget.position);
+                aimIcon.transform.position = screenPos + (Vector3)targetLockOffset;
+            }
         }
-
-        // Show or hide aim icon depending on targeting
-        if (aimIcon) aimIcon.gameObject.SetActive(isTargeting);
-
-        // If targeting, feed override input into Cinemachine instead of normal look input
-        if (inputProvider != null)
+        else
         {
-            inputProvider.enabled = !isTargeting;
+            if (aimIcon)
+            {
+                aimIcon.gameObject.SetActive(false);
+            }
         }
-
     }
 
-    private void OnLook(Vector2 input)
-    {
-        lookInput = input;
-    }
-
-    private void AssignTarget()
+    private void AssignTarget(InputAction.CallbackContext context)
     {
         if (isTargeting)
         {
             // lock off of target
             isTargeting = false;
             currentTarget = null;
-            overrideInput = Vector2.zero;
             return;
         }
 
         // Lock onto the closest target
         GameObject target = ClosestTarget();
-        if (target)
+        if (target != null)
         {
             currentTarget = target.transform;
             isTargeting = true;
         }
     }
 
-    private void NewInputTarget(Transform target)
+    private void LockCameraOnTarget()
     {
-        if (!currentTarget) return;
+        // Vector from camera to target
+        Vector3 dirToTarget = currentTarget.position - mainCamera.transform.position;
 
-        Vector3 viewPos = mainCamera.WorldToViewportPoint(target.position);
+        // Don't rotate if too close
+        if (dirToTarget.magnitude < minDistance) return;
 
-        // Move aim icon
-        if (aimIcon)
-            aimIcon.transform.position = mainCamera.WorldToScreenPoint(target.position);
+        // Smoothly rotate camera to face target
+        Quaternion lookRotation = Quaternion.LookRotation(dirToTarget.normalized);
+        mainCamera.transform.rotation = Quaternion.Slerp(
+            mainCamera.transform.rotation,
+            lookRotation,
+            rotationSpeed * Time.deltaTime
+        );
 
-        // Stop adjusting if too close
-        if ((target.position - transform.position).magnitude < minDistance) return;
-
-        // Override inputs to center the camera
-        overrideInput.x = (viewPos.x - 0.5f + targetLockOffset.x) * 3f;
-        overrideInput.y = (viewPos.y - 0.5f + targetLockOffset.y) * 3f;
+        // Also rotate player body (optional: makes strafing around target)
+        Vector3 flatDir = dirToTarget;
+        flatDir.y = 0; // ignore vertical for player rotation
+        if (flatDir.sqrMagnitude > 0.01f)
+        {
+            Quaternion bodyRotation = Quaternion.LookRotation(flatDir.normalized);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                bodyRotation,
+                rotationSpeed * Time.deltaTime
+            );
+        }
     }
 
     private GameObject ClosestTarget()
     {
-        GameObject[] gos = GameObject.FindGameObjectsWithTag(enemyTag);
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag(enemyTag);
         GameObject closest = null;
         float distance = maxDistance;
-        Vector3 position = transform.position;
 
-        foreach (GameObject go in gos)
+        foreach (GameObject enemy in enemies)
         {
-            Vector3 diff = go.transform.position - position;
+            Vector3 diff = enemy.transform.position - transform.position;
             float curDistance = diff.magnitude;
 
             if (curDistance < distance)
             {
                 if (Vector3.Angle(diff.normalized, mainCamera.transform.forward) < maxAngle)
                 {
-                    closest = go;
+                    closest = enemy;
                     distance = curDistance;
                 }
             }

@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     public float maxLookY = 60f;            // Clamping the vertical look (down)
 
     public Rigidbody rb;
+    public SpearToss spearToss;
     private Vector2 currentInput;           // Current input from keyboard/gamepad
     private Vector2 currentLook;            // Current input from mouse/gamepad
     private Vector2 smoothLook;             // Smoothed look direction
@@ -35,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
     private InputAction moveAction;         // Input action for movement
     private InputAction lookAction;         // Input action for looking around
     private InputAction jumpAction;         // Input action for jumping
+    private InputAction attackAction;       // Input action for attacking
 
 
     void Awake()
@@ -47,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
         moveAction = playerInput.actions["Move"];
         lookAction = playerInput.actions["Look"];
         jumpAction = playerInput.actions["Jump"];
+        attackAction = playerInput.actions["Attack"];
     }
 
     void OnEnable()     // Subscribe to input actions when the script is enabled
@@ -61,6 +64,9 @@ public class PlayerMovement : MonoBehaviour
 
         jumpAction.Enable();
         jumpAction.performed += OnJump;
+
+        attackAction.Enable();
+        attackAction.performed += OnAttack;
     }
 
     void OnDisable()   // Unsubscribe from input actions when the script is disabled
@@ -72,6 +78,8 @@ public class PlayerMovement : MonoBehaviour
         lookAction.canceled -= OnLook;
 
         jumpAction.performed -= OnJump;
+
+        attackAction.performed -= OnAttack;
     }
 
     // Called whenever Move input changes
@@ -92,6 +100,14 @@ public class PlayerMovement : MonoBehaviour
         {
             // Jump velocity based on physics equation
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
+    }
+
+    public void OnAttack(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            spearToss.Shoot();
         }
     }
 
