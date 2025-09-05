@@ -23,8 +23,12 @@ public class PlayerMovement : MonoBehaviour
     public float minLookY = -60f;           // Clamping the vertical look (up) 
     public float maxLookY = 60f;            // Clamping the vertical look (down)
 
+    [Header("References")]
     public Rigidbody rb;
     public SpearToss spearToss;
+    public SkinnedMeshRenderer targetMeshRenderer; //Reference to the character mesh renderer, since this script is not attched to it (i love finding backdoor methods)
+    public Material healMat;
+    public Material defaultMat;
     private Vector2 currentInput;           // Current input from keyboard/gamepad
     private Vector2 currentLook;            // Current input from mouse/gamepad
     private Vector2 smoothLook;             // Smoothed look direction
@@ -37,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
     private InputAction lookAction;         // Input action for looking around
     private InputAction jumpAction;         // Input action for jumping
     private InputAction attackAction;       // Input action for attacking
+    private InputAction healAction;       // Input action for healing
 
 
     void Awake()
@@ -50,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
         lookAction = playerInput.actions["Look"];
         jumpAction = playerInput.actions["Jump"];
         attackAction = playerInput.actions["Attack"];
+        healAction = playerInput.actions["Heal"];
     }
 
     void OnEnable()     // Subscribe to input actions when the script is enabled
@@ -67,6 +73,9 @@ public class PlayerMovement : MonoBehaviour
 
         attackAction.Enable();
         attackAction.performed += OnAttack;
+
+        healAction.Enable();
+        healAction.performed += OnHeal;
     }
 
     void OnDisable()   // Unsubscribe from input actions when the script is disabled
@@ -80,6 +89,9 @@ public class PlayerMovement : MonoBehaviour
         jumpAction.performed -= OnJump;
 
         attackAction.performed -= OnAttack;
+
+        healAction.performed -= OnHeal;
+
     }
 
     // Called whenever Move input changes
@@ -108,6 +120,33 @@ public class PlayerMovement : MonoBehaviour
         if (context.performed)
         {
             spearToss.Shoot();
+        }
+    }
+
+    public void OnHeal(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            // I'll add better healing logic here later, just testing this for now
+            targetMeshRenderer.material = healMat;
+            Debug.Log("Heal action performed");
+        }
+        else if (context.canceled)
+        {
+            targetMeshRenderer.material = defaultMat;
+            Debug.Log("Heal action canceled");
+        }
+    }
+
+    public void Start()
+    {
+        foreach (var smr in GetComponentsInChildren<SkinnedMeshRenderer>())
+        {
+            if (smr.gameObject.name == "SuperHero_Male") //We're looking for the specific mesh because this thing keeps on screwing with me in the heal function (fuck I hate shaders)
+            {
+                targetMeshRenderer = smr;
+                break;
+            }
         }
     }
 

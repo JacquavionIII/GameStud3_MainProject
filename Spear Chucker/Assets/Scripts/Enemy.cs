@@ -140,11 +140,22 @@ public class Enemy : MonoBehaviour
     {
         Health -= damage;
 
-        if (Health <= 0) Invoke(nameof(DestroyEnemy), 0.5f);
+        if (Health <= 0) Invoke(nameof(Death), 0.5f);
     }
-    
-    private void DestroyEnemy()
+
+    private void Death()
     {
-        Destroy(gameObject);
+        ObjectPool.Instance.ReturnToPool(gameObject);
+        DropMeat();
+    }
+
+    private void DropMeat()
+    {
+        GameObject meat = ObjectPool.Instance.SpawnFromPool("Meat", transform.position, Quaternion.identity);
+        Rigidbody rb = meat.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.linearVelocity = new Vector3(Random.Range(-1f, 1f), 2f, Random.Range(-1f, 1f));
+        }
     }
 }

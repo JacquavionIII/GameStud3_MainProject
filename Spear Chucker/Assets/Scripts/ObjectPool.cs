@@ -62,6 +62,11 @@ public class ObjectPool : MonoBehaviour
         return objectToSpawn;
     }
 
+    public void ReturnToPool(GameObject obj)
+    {
+        obj.SetActive(false);
+    }
+
     void Update()
     {
 

@@ -89,7 +89,7 @@ Material:
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
     - _ExcludeFromTUAndAA: 0
-    - _Glow_Intensity: 14.86
+    - _Glow_Intensity: 200.93
     - _MaterialID: 1
     - _MaterialTypeMask: 2
     - _OpaqueCullMode: 2
@@ -100,7 +100,7 @@ Material:
     - _RefractionModel: 0
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
-    - _Shadow_Brightness: 0.31
+    - _Shadow_Brightness: 0.17
     - _Speed: 4
     - _SrcBlend: 1
     - _StencilRef: 0
