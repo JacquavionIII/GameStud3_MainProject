@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93fd44960e6b95d4891aedd6171e778a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poolTag: Meat
 --- !u!54 &6327420670026465553
 Rigidbody:
   m_ObjectHideFlags: 0

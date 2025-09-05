@@ -91,10 +91,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.42684972
-  m_Height: 2.0328145
+  m_Radius: 0.62424874
+  m_Height: 1.9146823
   m_Direction: 1
-  m_Center: {x: -0.035716295, y: 0.26867723, z: 0.139274}
+  m_Center: {x: 0.12424874, y: 0.27632934, z: 0}
 --- !u!54 &7318831341676055960
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -320,7 +320,7 @@ MonoBehaviour:
   lookSensitivity: 2
   smoothTime: 0.05
   minLookY: -15
-  maxLookY: 10
+  maxLookY: 5
   rb: {fileID: 7318831341676055960}
   spearToss: {fileID: 6443076098641282819}
   targetMeshRenderer: {fileID: 7222596207308668858}

@@ -10,6 +10,8 @@ public class Enemy : MonoBehaviour
     public Transform player;
     public LayerMask whatIsGround, whatIsPlayer;
     public int Health;
+    public Animator anim;
+    public event System.Action onDeath; //event to notify us when the enemy dies
 
     [Header("Patroling")]
     public Vector3 walkPoint;
@@ -26,7 +28,7 @@ public class Enemy : MonoBehaviour
 
     [Header("Shader Stuff")]
     public TargetLock targetLock;
-    MeshRenderer meshRenderer;
+    public SkinnedMeshRenderer meshRenderer;
     public Material lockOnMat;
     public Material defaultMat;
 
@@ -38,7 +40,16 @@ public class Enemy : MonoBehaviour
 
     public void Start()
     {
-        meshRenderer = GetComponent<MeshRenderer>();
+        foreach (var smr in GetComponentsInChildren<SkinnedMeshRenderer>())
+        {
+            if (smr.gameObject.name == "Tiger_001") //We're looking for the specific mesh because this thing keeps on screwing with me in the heal function (fuck I hate shaders)
+            {
+                meshRenderer = smr;
+                break;
+            }
+        }
+
+        anim = GetComponentInChildren<Animator>();
     }
 
     void Update()
@@ -75,6 +86,8 @@ public class Enemy : MonoBehaviour
 
     public void Patroling()
     {
+        anim.SetBool("Patroling", true);
+        anim.SetBool("EnemyFound", false);
         if (!walkPointSet) SearchWalkPoint();
         if (walkPointSet)
             agent.SetDestination(walkPoint);
@@ -102,11 +115,15 @@ public class Enemy : MonoBehaviour
 
     private void ChasePlayer()
     {
+        anim.SetBool("EnemyFound", true);
+        anim.SetBool("Patroling", false);
         agent.SetDestination(player.position);
     }
 
     private void AttackPlayer()
     {
+        anim.SetBool("EnemyFound", false);
+        anim.SetBool("Patroling", false);
         //Make sure enemy doesn't move
         agent.SetDestination(transform.position);
 
@@ -145,8 +162,9 @@ public class Enemy : MonoBehaviour
 
     private void Death()
     {
-        ObjectPool.Instance.ReturnToPool(gameObject);
         DropMeat();
+        onDeath?.Invoke(); //notify subscribers that this enemy has died
+        ObjectPool.Instance.ReturnToPool(gameObject); //returns the object to pool once it dies
     }
 
     private void DropMeat()
