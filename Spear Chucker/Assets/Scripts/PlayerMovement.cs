@@ -25,6 +25,8 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("References")]
     public Rigidbody rb;
+    public Animator animator;
+    [SerializeField] private string shootTriggerName = "isShooting"; // Name of the trigger parameter in the Animator
     public SpearToss spearToss;
     public SkinnedMeshRenderer targetMeshRenderer; //Reference to the character mesh renderer, since this script is not attched to it (i love finding backdoor methods)
     public Material healMat;
@@ -98,6 +100,11 @@ public class PlayerMovement : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         currentInput = context.ReadValue<Vector2>();
+        animator.SetBool("isRunning", true); // Set running animation when there's input
+        if (context.canceled)
+        {
+            animator.SetBool("isRunning", false); // Stop running animation when input stops
+        }
     }
 
     // Called whenever Look input changes
@@ -120,6 +127,7 @@ public class PlayerMovement : MonoBehaviour
         if (context.performed)
         {
             spearToss.Shoot();
+            animator.SetTrigger(shootTriggerName);
         }
     }
 
@@ -130,11 +138,13 @@ public class PlayerMovement : MonoBehaviour
             // I'll add better healing logic here later, just testing this for now
             targetMeshRenderer.material = healMat;
             Debug.Log("Heal action performed");
+            animator.SetBool("isHealing", true);
         }
         else if (context.canceled)
         {
             targetMeshRenderer.material = defaultMat;
             Debug.Log("Heal action canceled");
+            animator.SetBool("isHealing", false);
         }
     }
 
@@ -148,6 +158,8 @@ public class PlayerMovement : MonoBehaviour
                 break;
             }
         }
+
+        animator = GetComponentInChildren<Animator>();
     }
 
     void Update()
