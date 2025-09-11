@@ -317,13 +317,15 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   cameraTransform: {fileID: 8563346575428243932}
-  lookSensitivity: 2
+  lookSensitivity: 3
   smoothTime: 0.05
   minLookY: -15
   maxLookY: 5
   rb: {fileID: 7318831341676055960}
+  animator: {fileID: 0}
+  shootTriggerName: isShooting
   spearToss: {fileID: 6443076098641282819}
-  targetMeshRenderer: {fileID: 0}
+  targetMeshRenderer: {fileID: 6621159669070557795}
   healMat: {fileID: 2100000, guid: b749de541ec18b640951a8d749328e84, type: 2}
   defaultMat: {fileID: 2100000, guid: 1a11c91cba646644993bcacdc8c6f669, type: 2}
 --- !u!114 &6443076098641282819
@@ -950,5 +952,10 @@ PrefabInstance:
 --- !u!4 &5416952473312555208 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 13598b98668cc614082f352948e84c2e, type: 3}
+  m_PrefabInstance: {fileID: 5523199774360770339}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &6621159669070557795 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1676831429412873536, guid: 13598b98668cc614082f352948e84c2e, type: 3}
   m_PrefabInstance: {fileID: 5523199774360770339}
   m_PrefabAsset: {fileID: 0}
