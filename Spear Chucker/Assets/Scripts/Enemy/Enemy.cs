@@ -118,6 +118,9 @@ public class Enemy : MonoBehaviour
         anim.SetBool("EnemyFound", true);
         anim.SetBool("Patroling", false);
         agent.SetDestination(player.position);
+
+        // Ensure the enemy faces the player while chasing
+        transform.LookAt(player);
     }
 
     private void AttackPlayer()
