@@ -469,7 +469,7 @@ GameObject:
   - component: {fileID: 69800331}
   - component: {fileID: 69800330}
   - component: {fileID: 69800329}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7184,6 +7184,18 @@ PrefabInstance:
       propertyPath: targetLock
       value: 
       objectReference: {fileID: 877174207}
+    - target: {fileID: 4752224915055318558, guid: 3e696d1e223edfb4e8131fd1f1cb9b2c, type: 3}
+      propertyPath: walkPoint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4752224915055318558, guid: 3e696d1e223edfb4e8131fd1f1cb9b2c, type: 3}
+      propertyPath: walkPoint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4752224915055318558, guid: 3e696d1e223edfb4e8131fd1f1cb9b2c, type: 3}
+      propertyPath: walkPointRange
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5001967697536535074, guid: 3e696d1e223edfb4e8131fd1f1cb9b2c, type: 3}
       propertyPath: m_Enabled
       value: 0

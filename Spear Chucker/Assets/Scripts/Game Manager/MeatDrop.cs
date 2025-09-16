@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityEngine.Events;
 
-public class MeatDrop : MonoBehaviour
+public class MeatDrop : MonoBehaviour, IPickUpAble
 {
     public float spawnTime = 20f; //how long the meat drop will be available for before it despawns
     private float timer;
+    public UnityEvent OnPickedUp;
 
     private void OnEnable()
     {
@@ -19,6 +21,11 @@ public class MeatDrop : MonoBehaviour
         }
     }
 
+    public void OnPickUp()
+    {
+        print("yum yum in my tum tum");
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -26,6 +33,7 @@ public class MeatDrop : MonoBehaviour
             // I'll add healing logic later
             print("Player picked up meat");
             ObjectPool.Instance.ReturnToPool(this.gameObject);
+            OnPickedUp.Invoke();
         }
     }
 }

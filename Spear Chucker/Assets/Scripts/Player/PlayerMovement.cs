@@ -162,6 +162,14 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
     }
 
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<IPickUpAble>() != null)
+        {
+            other.GetComponent<IPickUpAble>().OnPickUp();
+        }
+    }
+
     void Update()
     {
         // Groundcheck lol

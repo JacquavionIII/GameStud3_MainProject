@@ -137,11 +137,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   Health: 50
-  anim: {fileID: 0}
-  forwardPoint: {fileID: 0}
-  isFacingForward: 0
+  anim: {fileID: 4286371402310587485}
   walkPoint: {x: 0, y: 0, z: 0}
-  walkPointRange: 0
+  walkPointRange: 5
   timeBetweenAttacks: 2
   sightRange: 12
   attackRange: 0

@@ -1,6 +1,6 @@
-using UnityEngine;
 
-public class IPickUpAble : MonoBehaviour
+
+public interface IPickUpAble
 {
-    public void OnPickUp(){}
+    void OnPickUp();
 }
