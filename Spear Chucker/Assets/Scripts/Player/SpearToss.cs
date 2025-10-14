@@ -16,7 +16,7 @@ public class SpearToss : MonoBehaviour
         //Destroy(temp, 2f);
 
         GameObject temp = ObjectPool.Instance.SpawnFromPool(currentType, shootLocation.position, Quaternion.identity);
-        temp.GetComponent<Rigidbody>().linearVelocity = new Vector3(speed, 0, 0);
+        temp.GetComponent<Rigidbody>().linearVelocity = shootLocation.forward * speed;
         temp.GetComponent<ObjectController>().Spawned();
     }
 }
