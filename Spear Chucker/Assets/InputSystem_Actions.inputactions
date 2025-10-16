@@ -103,6 +103,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Sense",
+                    "type": "Button",
+                    "id": "8282b021-a2d1-430d-960e-6ff15a340f50",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -532,6 +541,28 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Heal",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "25849f5d-d4d3-49a7-b1b8-2873bafc3963",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Sense",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e4baf968-47e3-47ca-89ea-3ba0de93ac55",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Sense",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

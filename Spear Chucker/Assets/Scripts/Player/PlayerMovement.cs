@@ -8,8 +8,10 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement Settings")]
     public float speed = 12f;                
-    public float gravity = -9.81f;           
-    public float jumpHeight = 3f; 
+    public float gravity = -9.81f;
+    public float jumpHeight = 3f;
+    public float senseTimer = 5f;          // Duration for which the sense VFX remains active
+    public bool senseActive = false;      // To track if the sense action is active
 
     [Header("Ground Check")]
     public Transform groundCheck;            
@@ -31,6 +33,8 @@ public class PlayerMovement : MonoBehaviour
     public SkinnedMeshRenderer targetMeshRenderer; //Reference to the character mesh renderer, since this script is not attched to it (i love finding backdoor methods)
     public Material healMat;
     public Material defaultMat;
+    public Transform healVFX;               // Reference to the healing VFX object
+    public Transform senseVFX;              // Reference to the sensing VFX object
     private Vector2 currentInput;           // Current input from keyboard/gamepad
     private Vector2 currentLook;            // Current input from mouse/gamepad
     private Vector2 smoothLook;             // Smoothed look direction
@@ -39,11 +43,13 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
     private float camRotationX;             // Vertical camera rotation
 
+
     private InputAction moveAction;         // Input action for movement
     private InputAction lookAction;         // Input action for looking around
     private InputAction jumpAction;         // Input action for jumping
     private InputAction attackAction;       // Input action for attacking
     private InputAction healAction;       // Input action for healing
+    private InputAction senseAction;       // Input action for sensing 
 
 
     void Awake()
@@ -58,6 +64,7 @@ public class PlayerMovement : MonoBehaviour
         jumpAction = playerInput.actions["Jump"];
         attackAction = playerInput.actions["Attack"];
         healAction = playerInput.actions["Heal"];
+        senseAction = playerInput.actions["Sense"];
     }
 
     void OnEnable()     // Subscribe to input actions when the script is enabled
@@ -78,6 +85,9 @@ public class PlayerMovement : MonoBehaviour
 
         healAction.Enable();
         healAction.performed += OnHeal;
+
+        senseAction.Enable();
+        senseAction.performed += OnSense;        
     }
 
     void OnDisable()   // Unsubscribe from input actions when the script is disabled
@@ -93,6 +103,8 @@ public class PlayerMovement : MonoBehaviour
         attackAction.performed -= OnAttack;
 
         healAction.performed -= OnHeal;
+
+        senseAction.performed -= OnSense;
 
     }
 
@@ -139,13 +151,37 @@ public class PlayerMovement : MonoBehaviour
             targetMeshRenderer.material = healMat;
             Debug.Log("Heal action performed");
             animator.SetBool("isHealing", true);
+            healVFX.gameObject.SetActive(true); // Activate healing VFX
         }
         else if (context.canceled)
         {
             targetMeshRenderer.material = defaultMat;
             Debug.Log("Heal action canceled");
             animator.SetBool("isHealing", false);
+            healVFX.gameObject.SetActive(false); // Deactivate healing VFX
         }
+    }
+
+    public void OnSense(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            senseVFX.gameObject.SetActive(true); // Activate sensing VFX
+            senseActive = true;
+            senseTimer = 5f; // yes im doing this 10 million times cause im making sure it doesnt screw me over like its been
+        }
+        else if (context.canceled)
+        {
+            senseActive = false;
+            senseTimer = 5f;
+        }
+    }
+
+    public void EndSense() //Called by an animation event at the end of the sense animation
+    {
+        senseVFX.gameObject.SetActive(false); // Deactivate sensing VFX
+        senseActive = false;
+        senseTimer = 5f; 
     }
 
     public void Start()
@@ -182,6 +218,21 @@ public class PlayerMovement : MonoBehaviour
         }
 
         HandleCameraLook(); //Calling this in Update for smoother camera movement
+
+        if (senseActive)
+        {
+            senseTimer -= Time.deltaTime;
+            if (senseTimer <= 0f)
+            {
+                EndSense();
+                senseActive = false;
+                senseTimer = 5f;
+            }
+        }
+        else
+        {
+            senseTimer = 5f;
+        }
     }
 
     void FixedUpdate()
