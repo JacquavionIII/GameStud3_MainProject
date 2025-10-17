@@ -4,7 +4,7 @@ using UnityEngine.VFX;
 public class HumanEnemy : Enemy
 {
     public float deathTimer = 5f;
-    public VisualEffect hitVFX;
+    public Transform hitVFX;
     public override void Start()
     {
         foreach (var smr in GetComponentsInChildren<SkinnedMeshRenderer>())
@@ -68,13 +68,21 @@ public class HumanEnemy : Enemy
         {
             Debug.Log("Enemy Hit by Spear");
             TakeDamage(20); // Enemy takes damage when colliding with player
-            Instantiate(hitVFX, transform.position, Quaternion.identity);
+            hitVFX.gameObject.SetActive(true);
         }
         if (collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("Player hit by enemy");
             TakeDamage(10); // Enemy takes damage when colliding with player
         }
+    }
+
+    public void OisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Spear"))
+        {
+            hitVFX.gameObject.SetActive(false);
+        } 
     }
 
     private void TakeDamage(int damage)
