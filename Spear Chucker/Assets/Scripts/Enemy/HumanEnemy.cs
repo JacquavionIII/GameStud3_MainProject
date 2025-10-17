@@ -68,6 +68,7 @@ public class HumanEnemy : Enemy
         {
             Debug.Log("Enemy Hit by Spear");
             TakeDamage(20); // Enemy takes damage when colliding with player
+            Instantiate(hitVFX, transform.position, Quaternion.identity);
         }
         if (collision.gameObject.CompareTag("Player"))
         {
