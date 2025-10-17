@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
 
     [Header("Patroling")]
     public Vector3 walkPoint;
-    bool walkPointSet;
+    public bool walkPointSet;
     public float walkPointRange;
 
     [Header("Attacking")]
@@ -38,7 +38,7 @@ public class Enemy : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
 
-    public void Start()
+    public virtual void Start()
     {
         foreach (var smr in GetComponentsInChildren<SkinnedMeshRenderer>())
         {
@@ -84,7 +84,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void Patroling()
+    public virtual void Patroling()
     {
         anim.SetBool("Patroling", true);
         anim.SetBool("EnemyFound", false);
@@ -99,7 +99,7 @@ public class Enemy : MonoBehaviour
             walkPointSet = false;
     }
 
-    private void SearchWalkPoint()
+    public void SearchWalkPoint()
     {
         //Calculate random point in range
         float randomZ = Random.Range(-walkPointRange, walkPointRange);
