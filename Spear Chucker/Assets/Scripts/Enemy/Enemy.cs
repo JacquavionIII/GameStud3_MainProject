@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour
 
     [Header("Attacking")]
     public float timeBetweenAttacks;
-    bool alreadyAttacked;
+    public bool alreadyAttacked;
 
     [Header("States")]
     public float sightRange, attackRange;
@@ -52,7 +52,7 @@ public class Enemy : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
     }
 
-    void Update()
+    protected void Update()
     {
         //In update to constantly check for the player
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
@@ -113,7 +113,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void ChasePlayer()
+    protected virtual void ChasePlayer()
     {
         anim.SetBool("EnemyFound", true);
         anim.SetBool("Patroling", false);
@@ -123,7 +123,7 @@ public class Enemy : MonoBehaviour
         transform.LookAt(player);
     }
 
-    private void AttackPlayer()
+    protected virtual void AttackPlayer()
     {
         anim.SetBool("EnemyFound", false);
         anim.SetBool("Patroling", false);
@@ -142,12 +142,12 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void ResetAttack()
+    protected void ResetAttack()
     {
         alreadyAttacked = false;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    protected virtual void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Spear"))
         {
@@ -156,21 +156,26 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage)
+    private void TakeDamage(int damage)
     {
         Health -= damage;
 
         if (Health <= 0) Invoke(nameof(Death), 0.5f);
     }
 
-    private void Death()
+    protected virtual void Death()
     {
-        DropMeat();
-        onDeath?.Invoke(); //notify subscribers that this enemy has died
+        DropMats();
+        ComeBackAfterDeath(); //notify subscribers that this enemy has died
         ObjectPool.Instance.ReturnToPool(gameObject); //returns the object to pool once it dies
     }
 
-    private void DropMeat()
+    protected void ComeBackAfterDeath()
+    {
+        onDeath?.Invoke();
+    }
+
+    protected virtual void DropMats()
     {
         GameObject meat = ObjectPool.Instance.SpawnFromPool("Meat", transform.position, Quaternion.identity);
         Rigidbody rb = meat.GetComponent<Rigidbody>();
