@@ -370,8 +370,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyTag: Enemy
+  humanEnemyTag: HumanEnemy
   spawnIntervals: 5
   maxEnemiesAlive: 3
+  maxHumanEnemiesAlive: 2
   timer: 0
 --- !u!1001 &69316018
 PrefabInstance:
@@ -5216,12 +5218,21 @@ MonoBehaviour:
   - tag: Enemy
     prefab: {fileID: 1358600552726861961}
     size: 5
+  - tag: HumanEnemy
+    prefab: {fileID: 3506133252433089823, guid: e57627a9354cc8743a0ceb07a78a10f6, type: 3}
+    size: 3
   - tag: Meat
     prefab: {fileID: 4645185227535758508, guid: f56a87e3671342a46a85a16b7f7a8fcf, type: 3}
     size: 2
+  - tag: Stone
+    prefab: {fileID: 4645185227535758508, guid: 066a7ce8b8310384681fda4a2811c41d, type: 3}
+    size: 2
+  - tag: Wood
+    prefab: {fileID: 4645185227535758508, guid: ef73f15246d2be74c9b45ac48e6235c5, type: 3}
+    size: 1
   currentType: Spear
   shootLocation: {fileID: 429483411}
-  speed: 10
+  speed: 12
 --- !u!4 &1403122476
 Transform:
   m_ObjectHideFlags: 0
@@ -7195,9 +7206,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Human Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 5010244806901458409, guid: e57627a9354cc8743a0ceb07a78a10f6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5520049364741049812, guid: e57627a9354cc8743a0ceb07a78a10f6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 150.0708
+      value: 155.57
       objectReference: {fileID: 0}
     - target: {fileID: 5520049364741049812, guid: e57627a9354cc8743a0ceb07a78a10f6, type: 3}
       propertyPath: m_LocalPosition.y
@@ -7205,7 +7220,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5520049364741049812, guid: e57627a9354cc8743a0ceb07a78a10f6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -102.123
+      value: -94.02
       objectReference: {fileID: 0}
     - target: {fileID: 5520049364741049812, guid: e57627a9354cc8743a0ceb07a78a10f6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7233,6 +7248,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5520049364741049812, guid: e57627a9354cc8743a0ceb07a78a10f6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766877128991076282, guid: e57627a9354cc8743a0ceb07a78a10f6, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8491276716304223787, guid: e57627a9354cc8743a0ceb07a78a10f6, type: 3}

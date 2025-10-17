@@ -8,6 +8,9 @@ TagManager:
   - Enemy
   - Spear
   - Meat
+  - HumanEnemy
+  - Stone
+  - Wood
   layers:
   - Default
   - TransparentFX

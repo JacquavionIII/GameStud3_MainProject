@@ -10,6 +10,7 @@ public class TargetLock : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private string enemyTag = "Enemy";               // The tag used for enemies
+    [SerializeField] private string humanEnemyTag = "HumanEnemy";     // The tag used for human enemies
     [SerializeField] private Vector2 targetLockOffset;                // Offset for fine-tuning the lock-on position
     [SerializeField] private float minDistance = 2f;                  // Minimum distance to target before camera stops rotating
     [SerializeField] private float maxDistance = 20f;                // Maximum distance to search for targets
@@ -100,7 +101,7 @@ public class TargetLock : MonoBehaviour
             rotationSpeed * Time.deltaTime
         );
 
-        // Also rotate player body (optional: makes strafing around target)
+        // Also rotate player body to face the target
         Vector3 flatDir = dirToTarget;
         flatDir.y = 0; // ignore vertical for player rotation
         if (flatDir.sqrMagnitude > 0.01f)
@@ -117,10 +118,17 @@ public class TargetLock : MonoBehaviour
     private GameObject ClosestTarget()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag(enemyTag);
+        GameObject[] humanEnemies = GameObject.FindGameObjectsWithTag(humanEnemyTag);
+
+        // To combine both arrays so that i can 1) expand on enemy types later and 2) avoid duplicate code that will fuck me over later
+        GameObject[] allEnemies = new GameObject[enemies.Length + humanEnemies.Length];
+        enemies.CopyTo(allEnemies, 0);
+        humanEnemies.CopyTo(allEnemies, enemies.Length);
+
         GameObject closest = null;
         float distance = maxDistance;
 
-        foreach (GameObject enemy in enemies)
+        foreach (GameObject enemy in allEnemies)
         {
             Vector3 diff = enemy.transform.position - transform.position;
             float curDistance = diff.magnitude;
