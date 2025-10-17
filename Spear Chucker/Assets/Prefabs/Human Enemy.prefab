@@ -115,7 +115,7 @@ MonoBehaviour:
   lockOnMat: {fileID: -876546973899608171, guid: ef6be6febf5c68b4c877331a13a43ced, type: 3}
   defaultMat: {fileID: 2100000, guid: 06c266af7c021c243948092718fe61a2, type: 2}
   deathTimer: 5
-  hitVFX: {fileID: 7135426657777100057}
+  hitVFX: {fileID: 1122737361785136033}
 --- !u!1 &5010244806901458409
 GameObject:
   m_ObjectHideFlags: 0
