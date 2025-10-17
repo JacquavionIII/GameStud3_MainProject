@@ -340,6 +340,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 8d441dee-9fff-4510-964d-75679392442b
     m_ActionName: 'Player/Heal[/Keyboard/h]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8282b021-a2d1-430d-960e-6ff15a340f50
+    m_ActionName: 'Player/Sense[/Keyboard/tab]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -360,6 +364,8 @@ MonoBehaviour:
   speed: 12
   gravity: -9.81
   jumpHeight: 3
+  senseTimer: 5
+  senseActive: 0
   groundCheck: {fileID: 8768651640337102012}
   groundDistance: 0.4
   groundLayer:
