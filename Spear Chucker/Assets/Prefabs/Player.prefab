@@ -119,6 +119,7 @@ Transform:
   - {fileID: 8768651640337102012}
   - {fileID: 5416952473312555208}
   - {fileID: 8117342061005513751}
+  - {fileID: 5055624366133503632}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &8928792701679870983
@@ -378,7 +379,6 @@ MonoBehaviour:
   maxLookY: 5
   rb: {fileID: 7318831341676055960}
   animator: {fileID: 0}
-  shootTriggerName: isShooting
   spearToss: {fileID: 6443076098641282819}
   targetMeshRenderer: {fileID: 6621159669070557795}
   healMat: {fileID: 2100000, guid: b749de541ec18b640951a8d749328e84, type: 2}
@@ -415,6 +415,7 @@ MonoBehaviour:
   mainCamera: {fileID: 8250309090747864969}
   aimIcon: {fileID: 9066228583627155782, guid: e5faf434e8c2ce44b8ecbb8b86c8c947, type: 3}
   enemyTag: Enemy
+  humanEnemyTag: HumanEnemy
   targetLockOffset: {x: 0, y: 0}
   minDistance: 2
   maxDistance: 20
@@ -864,6 +865,37 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &7762879704734611282
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5055624366133503632}
+  m_Layer: 3
+  m_Name: Follow Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5055624366133503632
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7762879704734611282}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.203, y: 0.986, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7757667827703396470}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7870198306656337794
 GameObject:
   m_ObjectHideFlags: 0
