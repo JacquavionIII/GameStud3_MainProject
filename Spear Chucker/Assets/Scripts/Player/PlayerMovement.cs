@@ -28,7 +28,6 @@ public class PlayerMovement : MonoBehaviour
     [Header("References")]
     public Rigidbody rb;
     public Animator animator;
-    [SerializeField] private string shootTriggerName = "isShooting"; // Name of the trigger parameter in the Animator
     public SpearToss spearToss;
     public SkinnedMeshRenderer targetMeshRenderer; //Reference to the character mesh renderer, since this script is not attched to it (i love finding backdoor methods)
     public Material healMat;
@@ -139,7 +138,11 @@ public class PlayerMovement : MonoBehaviour
         if (context.performed)
         {
             spearToss.Shoot();
-            animator.SetTrigger(shootTriggerName);
+            animator.SetBool("isShooting", true);
+        }
+        else if (context.canceled)
+        {
+            animator.SetBool("isShooting", false);
         }
     }
 
