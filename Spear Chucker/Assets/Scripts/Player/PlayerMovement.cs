@@ -18,12 +18,18 @@ public class PlayerMovement : MonoBehaviour
     public float groundDistance = 0.4f;         
     public LayerMask groundLayer;
 
-    [Header("Camera Settings")]
-    public Transform cameraTransform;
-    public float lookSensitivity = 3f;      // Controling the look sensitivity
-    public float smoothTime = 0.05f;        // How quickly the camera lerps
-    public float minLookY = -60f;           // Clamping the vertical look (up) 
-    public float maxLookY = 60f;            // Clamping the vertical look (down)
+    // [Header("Camera Settings")]
+    // public Transform cameraTransform;
+    // [SerializeField] private float mouseSensitivity = 0.1f;
+    // [SerializeField] private float controllerSensitivity = 200f;      // Controling the look sensitivity
+    // public float smoothTime = 0.05f;        // How quickly the camera lerps
+    // public float minLookY = -60f;           // Clamping the vertical look (up) 
+    // public float maxLookY = 60f;            // Clamping the vertical look (down)
+    // private float camRotationX;             // Vertical camera rotation
+    private Vector2 currentInput;           // Current input from keyboard/gamepad
+    // private Vector2 currentLook;            // Current input from mouse/gamepad
+    // private Vector2 smoothLook;             // Smoothed look direction
+    // private Vector2 lookVelocity;           // Velocity used by SmoothDamp
 
     [Header("References")]
     public Rigidbody rb;
@@ -34,15 +40,10 @@ public class PlayerMovement : MonoBehaviour
     public Material defaultMat;
     public Transform healVFX;               // Reference to the healing VFX object
     public Transform senseVFX;              // Reference to the sensing VFX object
-    private Vector2 currentInput;           // Current input from keyboard/gamepad
-    private Vector2 currentLook;            // Current input from mouse/gamepad
-    private Vector2 smoothLook;             // Smoothed look direction
-    private Vector2 lookVelocity;           // Velocity used by SmoothDamp
     private Vector3 velocity;               // Jump velocity
     private bool isGrounded;
-    private float camRotationX;             // Vertical camera rotation
 
-
+    [Header("Input Actions")]
     private InputAction moveAction;         // Input action for movement
     private InputAction lookAction;         // Input action for looking around
     private InputAction jumpAction;         // Input action for jumping
@@ -59,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
         //Get the player's input actions
         var playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions["Move"];
-        lookAction = playerInput.actions["Look"];
+        //lookAction = playerInput.actions["Look"];
         jumpAction = playerInput.actions["Jump"];
         attackAction = playerInput.actions["Attack"];
         healAction = playerInput.actions["Heal"];
@@ -73,8 +74,8 @@ public class PlayerMovement : MonoBehaviour
         moveAction.canceled += OnMove;
 
         lookAction.Enable();
-        lookAction.performed += OnLook;
-        lookAction.canceled += OnLook;
+        // lookAction.performed += OnLook;
+        // lookAction.canceled += OnLook;
 
         jumpAction.Enable();
         jumpAction.performed += OnJump;
@@ -94,8 +95,8 @@ public class PlayerMovement : MonoBehaviour
         moveAction.performed -= OnMove;
         moveAction.canceled -= OnMove;
 
-        lookAction.performed -= OnLook;
-        lookAction.canceled -= OnLook;
+        // lookAction.performed -= OnLook;
+        // lookAction.canceled -= OnLook;
 
         jumpAction.performed -= OnJump;
 
@@ -111,18 +112,14 @@ public class PlayerMovement : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         currentInput = context.ReadValue<Vector2>();
-        animator.SetBool("isRunning", true); // Set running animation when there's input
-        if (context.canceled)
-        {
-            animator.SetBool("isRunning", false); // Stop running animation when input stops
-        }
+        
     }
 
     // Called whenever Look input changes
-    public void OnLook(InputAction.CallbackContext context)
-    {
-        currentLook = context.ReadValue<Vector2>();
-    }
+    // public void OnLook(InputAction.CallbackContext context)
+    // {
+    //     currentLook = context.ReadValue<Vector2>();
+    // }
 
     public void OnJump(InputAction.CallbackContext context)
     {
@@ -220,7 +217,7 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = -2f; // small downward force keeps player grounded
         }
 
-        HandleCameraLook(); //Calling this in Update for smoother camera movement
+        //HandleCameraLook(); //Calling this in Update for smoother camera movement
 
         if (senseActive)
         {
@@ -245,7 +242,7 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleMovement()
     {
-       // real-time movement cause the orignal one was fucking out and made me tweak a bit....
+        // real-time movement cause the orignal one was fucking out and made me tweak a bit....
         Vector3 move = (transform.right * currentInput.x + transform.forward * currentInput.y).normalized * speed;
 
         // movement along x with the rb, if this fucks up I'm gonna tweak cause it was working before
@@ -254,20 +251,32 @@ public class PlayerMovement : MonoBehaviour
         // Apply gravity & jump (velocity.y is modified in Update or OnJump)
         velocity.y += gravity * Time.fixedDeltaTime;
         rb.AddForce(Vector3.up * velocity.y, ForceMode.Acceleration);
+
+        bool isRunning = currentInput.magnitude > 0.1f; //if the player's input magnitude is greater than a small threshold then it'll trigger the bool for the anim
+        animator.SetBool("isRunning", isRunning); // Set running animation when there's input
     }
     
-    void HandleCameraLook()
-    {
-        // Smooth input with Lerp (or SmoothDamp for extra smoothness)
-        smoothLook = Vector2.SmoothDamp(smoothLook, currentLook, ref lookVelocity, smoothTime); //using the ref to keep track of the velocity to make the smoothing work
+    //Experimenting with cinemachine logic 
+    // void HandleCameraLook()
+    // {
+    //     // Detect if the player is using mouse input
+    //     bool usingMouse = Mouse.current != null && Mouse.current.delta.ReadValue() != Vector2.zero;
 
-        // Horizontal rotation (rotate the player body)
-        transform.Rotate(Vector3.up * smoothLook.x * lookSensitivity * Time.deltaTime);
+    //     // Scale look input depending on input device
+    //     Vector2 scaledLook = usingMouse
+    //     ? currentLook * mouseSensitivity
+    //     : currentLook * controllerSensitivity * Time.deltaTime;
 
-        // Vertical rotation (rotate camera only)
-        camRotationX -= smoothLook.y * lookSensitivity * Time.deltaTime;
-        camRotationX = Mathf.Clamp(camRotationX, minLookY, maxLookY);
+    //     // Smooth input with Lerp (or SmoothDamp for extra smoothness)
+    //     smoothLook = Vector2.SmoothDamp(smoothLook, currentLook, ref lookVelocity, smoothTime); //using the ref to keep track of the velocity to make the smoothing work
 
-        cameraTransform.localRotation = Quaternion.Euler(camRotationX, 0f, 0f);
-    }
+    //     // Horizontal rotation (rotate the player body)
+    //     transform.Rotate(Vector3.up * smoothLook.x);
+
+    //     // Vertical rotation (rotate camera only)
+    //     camRotationX -= smoothLook.y;
+    //     camRotationX = Mathf.Clamp(camRotationX, minLookY, maxLookY);
+
+    //     cameraTransform.localRotation = Quaternion.Euler(camRotationX, 0f, 0f);
+    // }
 }
