@@ -73,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
         moveAction.performed += OnMove;
         moveAction.canceled += OnMove;
 
-        lookAction.Enable();
+        // lookAction.Enable();
         // lookAction.performed += OnLook;
         // lookAction.canceled += OnLook;
 
