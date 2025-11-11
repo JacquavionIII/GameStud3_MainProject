@@ -574,6 +574,7 @@ MonoBehaviour:
   defaultMat: {fileID: 2100000, guid: 1a11c91cba646644993bcacdc8c6f669, type: 2}
   healVFX: {fileID: 4353758243833607604}
   senseVFX: {fileID: 3751496674027920871}
+  cameraTrans: {fileID: 8563346575428243932}
 --- !u!114 &6443076098641282819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -930,7 +931,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4272163888828050655}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c860c4fda1aa0544957e9dc950e47e9, type: 3}
   m_Name: 
@@ -999,7 +1000,7 @@ MonoBehaviour:
       Owner: {fileID: 3404805803996961755}
       Enabled: 1
       Input:
-        InputAction: {fileID: -5630151704836100654, guid: 1d6e640e716dc4ff6989b73d02023f2b, type: 3}
+        InputAction: {fileID: -5630151704836100654, guid: 35845fe01580c41289b024647b1d1c53, type: 3}
         Gain: 1
         LegacyInput: 
         LegacyGain: 1
@@ -1012,7 +1013,7 @@ MonoBehaviour:
       Owner: {fileID: 3404805803996961755}
       Enabled: 1
       Input:
-        InputAction: {fileID: -5630151704836100654, guid: 1d6e640e716dc4ff6989b73d02023f2b, type: 3}
+        InputAction: {fileID: -5630151704836100654, guid: 35845fe01580c41289b024647b1d1c53, type: 3}
         Gain: -1
         LegacyInput: 
         LegacyGain: 1
@@ -1064,8 +1065,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5132176759022992202}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21280304, y: -0.0051107835, z: 0.0011131013, w: 0.9770811}
-  m_LocalPosition: {x: -0.5099945, y: 1.1120005, z: 0.13899994}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.0000038146973, y: 0, z: -0.0000076293945}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1104,7 +1105,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 51.6
+  field of view: 30
   orthographic: 0
   orthographic size: 5
   m_Depth: -1

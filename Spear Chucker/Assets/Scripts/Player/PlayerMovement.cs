@@ -40,6 +40,8 @@ public class PlayerMovement : MonoBehaviour
     public Material defaultMat;
     public Transform healVFX;               // Reference to the healing VFX object
     public Transform senseVFX;              // Reference to the sensing VFX object
+    public Transform cameraTrans;
+    public float rotationSpeed = 10f;
     private Vector3 velocity;               // Jump velocity
     private bool isGrounded;
 
@@ -242,18 +244,35 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleMovement()
     {
+        Transform cam = cameraTrans != null ? cameraTrans : (Camera.main != null ? Camera.main.transform : transform);
+
+        // Project camera forward/right onto XZ plane and normalize
+        Vector3 camForward = Vector3.Scale(cam.forward, new Vector3(1f, 0f, 1f)).normalized;
+        Vector3 camRight = Vector3.Scale(cam.right, new Vector3(1f, 0f, 1f)).normalized;
+
         // real-time movement cause the orignal one was fucking out and made me tweak a bit....
-        Vector3 move = (transform.right * currentInput.x + transform.forward * currentInput.y).normalized * speed;
+        Vector3 move = (transform.right * currentInput.x + camForward * currentInput.y).normalized * speed;
 
         // movement along x with the rb, if this fucks up I'm gonna tweak cause it was working before
         rb.linearVelocity = new Vector3(move.x, rb.linearVelocity.y, move.z);
 
+        // Rotate player body toward movement direction when there's input
+        Vector3 flatMove = new Vector3(move.x, 0f, move.z);
+        if (flatMove.magnitude > 0.1f)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(flatMove);
+            rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRot, rotationSpeed * Time.fixedDeltaTime));
+        }
+        
         // Apply gravity & jump (velocity.y is modified in Update or OnJump)
         velocity.y += gravity * Time.fixedDeltaTime;
         rb.AddForce(Vector3.up * velocity.y, ForceMode.Acceleration);
 
         bool isRunning = currentInput.magnitude > 0.1f; //if the player's input magnitude is greater than a small threshold then it'll trigger the bool for the anim
         animator.SetBool("isRunning", isRunning); // Set running animation when there's input
+
+        bool isRunBack = currentInput.magnitude < -0.1f;
+        animator.SetBool("isRunBack", isRunBack);
     }
     
     //Experimenting with cinemachine logic 
