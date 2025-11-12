@@ -250,17 +250,24 @@ public class PlayerMovement : MonoBehaviour
         Vector3 camForward = Vector3.Scale(cam.forward, new Vector3(1f, 0f, 1f)).normalized;
         Vector3 camRight = Vector3.Scale(cam.right, new Vector3(1f, 0f, 1f)).normalized;
 
-        // real-time movement cause the orignal one was fucking out and made me tweak a bit....
-        Vector3 move = (transform.right * currentInput.x + camForward * currentInput.y).normalized * speed;
+        
+        // Preserve analog magnitude (0..1) and clamp keyboard diagonal input to 1
+        float inputMagnitude = Mathf.Clamp01(currentInput.magnitude);
 
-        // movement along x with the rb, if this fucks up I'm gonna tweak cause it was working before
-        rb.linearVelocity = new Vector3(move.x, rb.linearVelocity.y, move.z);
+        // real-time movement cause the orignal one was fucking out and made me tweak a bit....
+        Vector3 inputDir = camRight * currentInput.x + camForward * currentInput.y;
+        Vector3 moveDir = inputDir.sqrMagnitude > 0.0001f ? inputDir.normalized : Vector3.zero;
+
+        // Desired horizontal velocity (normalized direction * speed * input strength)
+        Vector3 desiredVelocity = moveDir * speed * inputMagnitude;
+
+        // Apply horizontal velocity while keeping current vertical velocity
+        rb.linearVelocity = new Vector3(desiredVelocity.x, rb.linearVelocity.y, desiredVelocity.z);
 
         // Rotate player body toward movement direction when there's input
-        Vector3 flatMove = new Vector3(move.x, 0f, move.z);
-        if (flatMove.magnitude > 0.1f)
+        if (moveDir.magnitude > 0.1f)
         {
-            Quaternion targetRot = Quaternion.LookRotation(flatMove);
+            Quaternion targetRot = Quaternion.LookRotation(moveDir);
             rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRot, rotationSpeed * Time.fixedDeltaTime));
         }
         
@@ -271,8 +278,11 @@ public class PlayerMovement : MonoBehaviour
         bool isRunning = currentInput.magnitude > 0.1f; //if the player's input magnitude is greater than a small threshold then it'll trigger the bool for the anim
         animator.SetBool("isRunning", isRunning); // Set running animation when there's input
 
-        bool isRunBack = currentInput.magnitude < -0.1f;
-        animator.SetBool("isRunBack", isRunBack);
+        // bool isRunBack = currentInput.magnitude < -0.1f;
+        // animator.SetBool("isRunBack", isRunBack);
+
+        //other stuff: (a side note)
+        //The player stops being able to move after a bit. And when standing still and trying to move right or left, the player spins around instead going straight in that direction...
     }
     
     //Experimenting with cinemachine logic 

@@ -3,7 +3,8 @@ using UnityEngine.Events;
 
 public class WoodDrop : MonoBehaviour, IPickUpAble
 {
-public float spawnTime = 30f; //how long the wood drop will be available for before it despawns
+    public SpearHandler spearHandler;
+    public float spawnTime = 30f; //how long the wood drop will be available for before it despawns
     private float timer;
     public UnityEvent OnPickedUp;
 
@@ -24,6 +25,7 @@ public float spawnTime = 30f; //how long the wood drop will be available for bef
     public void OnPickUp()
     {
         print("I ain't a lumberjack but shawty let me give you this wood");
+        spearHandler.woodIn(1);
     }
 
     private void OnTriggerEnter(Collider other)

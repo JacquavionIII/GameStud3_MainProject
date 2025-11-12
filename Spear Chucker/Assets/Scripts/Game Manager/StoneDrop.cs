@@ -3,6 +3,7 @@ using UnityEngine.Events;
 
 public class StoneDrop : MonoBehaviour, IPickUpAble
 {
+    public SpearHandler spearHandler;
     public float spawnTime = 30f; //how long the stone drop will be available for before it despawns
     private float timer;
     public UnityEvent OnPickedUp;
@@ -24,6 +25,7 @@ public class StoneDrop : MonoBehaviour, IPickUpAble
     public void OnPickUp()
     {
         print("You know they used to stone people to death, right?"); //you come up with brainrot jokes for rocks and ill let you complain
+        spearHandler.stoneIN(1);
     }
 
     private void OnTriggerEnter(Collider other)
