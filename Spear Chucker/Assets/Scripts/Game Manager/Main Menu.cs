@@ -7,6 +7,8 @@ public class MainMenu : MonoBehaviour
     {
         //SceneManager.LoadScene("Game Scene");
         SceneManager.LoadScene("OutdoorsScene");
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void ExplainGame()

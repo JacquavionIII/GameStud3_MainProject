@@ -172,11 +172,6 @@ public class PlayerMovement : MonoBehaviour
             senseActive = true;
             senseTimer = 5f; // yes im doing this 10 million times cause im making sure it doesnt screw me over like its been
         }
-        else if (context.canceled)
-        {
-            senseActive = false;
-            senseTimer = 5f;
-        }
     }
 
     public void EndSense() //Called by an animation event at the end of the sense animation
