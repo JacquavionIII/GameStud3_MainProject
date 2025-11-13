@@ -142,7 +142,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    protected void ResetAttack()
+    public void ResetAttack()
     {
         alreadyAttacked = false;
     }
@@ -154,6 +154,8 @@ public class Enemy : MonoBehaviour
             Debug.Log("Player hit by enemy");
             TakeDamage(10); // Enemy takes damage when colliding with player
         }
+
+        
     }
 
     private void TakeDamage(int damage)

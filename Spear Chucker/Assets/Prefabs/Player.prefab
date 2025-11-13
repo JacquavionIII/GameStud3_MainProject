@@ -249,6 +249,7 @@ GameObject:
   - component: {fileID: 215925248827846650}
   - component: {fileID: 1219451583325022930}
   - component: {fileID: 2008684715020401929}
+  - component: {fileID: 3390735946228842365}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -568,6 +569,8 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  meat: {fileID: 0}
+  health: {fileID: 0}
   rb: {fileID: 7318831341676055960}
   animator: {fileID: 0}
   spearToss: {fileID: 6443076098641282819}
@@ -662,6 +665,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isHome: 0
+--- !u!114 &3390735946228842365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3714175292717597415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dd01307dc1af4c4088f356322c9dbaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
 --- !u!1 &3733041976924131418
 GameObject:
   m_ObjectHideFlags: 0

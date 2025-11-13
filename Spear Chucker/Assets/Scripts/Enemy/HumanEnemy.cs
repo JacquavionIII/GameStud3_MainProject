@@ -21,6 +21,7 @@ public class HumanEnemy : Enemy
     {
         anim.SetBool("isWalking", true);
         anim.SetBool("isRunning", false);
+        anim.SetBool("isAttacking", false);
         if (!walkPointSet) SearchWalkPoint();
         if (walkPointSet)
             agent.SetDestination(walkPoint);
@@ -36,6 +37,7 @@ public class HumanEnemy : Enemy
     {
         anim.SetBool("isRunning", true);
         anim.SetBool("isWalking", false);
+        anim.SetBool("isAttacking", false);
         agent.SetDestination(player.position);
 
         // Ensure the enemy faces the player while chasing
@@ -77,7 +79,7 @@ public class HumanEnemy : Enemy
         }
     }
 
-    public void OisionExit(Collision collision)
+    public void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Spear"))
         {

@@ -32,6 +32,8 @@ public class PlayerMovement : MonoBehaviour
     // private Vector2 lookVelocity;           // Velocity used by SmoothDamp
 
     [Header("References")]
+    public MeatDrop meat;
+    public Health health;
     public Rigidbody rb;
     public Animator animator;
     public SpearToss spearToss;
@@ -149,16 +151,21 @@ public class PlayerMovement : MonoBehaviour
     {
         if (context.performed)
         {
-            // I'll add better healing logic here later, just testing this for now
-            targetMeshRenderer.material = healMat;
-            Debug.Log("Heal action performed");
-            animator.SetBool("isHealing", true);
-            healVFX.gameObject.SetActive(true); // Activate healing VFX
+            if (meat.meatAmount > 0)
+            {
+                // I'll add better healing logic here later, just testing this for now
+                targetMeshRenderer.material = healMat;
+                Debug.Log("Heal action performed");
+                animator.SetBool("isHealing", true);
+                healVFX.gameObject.SetActive(true); // Activate healing VFX
+                meat.meatAmount--;
+                health.Heal(10);
+            }
         }
         else if (context.canceled)
         {
             targetMeshRenderer.material = defaultMat;
-            Debug.Log("Heal action canceled");
+            Debug.Log("No meat to heal");
             animator.SetBool("isHealing", false);
             healVFX.gameObject.SetActive(false); // Deactivate healing VFX
         }
@@ -273,8 +280,8 @@ public class PlayerMovement : MonoBehaviour
         bool isRunning = currentInput.magnitude > 0.1f; //if the player's input magnitude is greater than a small threshold then it'll trigger the bool for the anim
         animator.SetBool("isRunning", isRunning); // Set running animation when there's input
 
-        // bool isRunBack = currentInput.magnitude < -0.1f;
-        // animator.SetBool("isRunBack", isRunBack);
+        bool isRunBack = currentInput.magnitude < -0.1f;
+        animator.SetBool("isRunBack", isRunBack);
 
         //other stuff: (a side note)
         //The player stops being able to move after a bit. And when standing still and trying to move right or left, the player spins around instead going straight in that direction...

@@ -4,54 +4,105 @@ using UnityEngine.SceneManagement;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] public Material hpMaterial; //Reference for the Hpbar material.
-    float health, maxHealth = 100;
-    private float lerpSpeed;
+    [Header("Health Bar Settings")]
+    public Image healthBar;
+    public int currentHealth, maxHealth = 100;
+    public playerHealth player;
 
-    public int FlowProperty = Shader.PropertyToID("_Flow"); //We're calling the shader property we want to change (the underscore is cause unity scripts list the shader thing like this).
+    [Header("Color Settings")]
+    public Color fullHealthColor = Color.green;
+    public Color lowHealthColor = Color.red;
+    public float colorChangeThreshold = 0.3f;
+    private float lerpSpeed = 3f;
+
 
     void Start()
     {
-        health = maxHealth;
+        healthBar.type = Image.Type.Filled;
+        healthBar.fillMethod = Image.FillMethod.Horizontal;
+        healthBar.fillAmount = 1f;
+        healthBar.color = fullHealthColor;
     }
 
     void Update()
     {
-        if (health > maxHealth) health = maxHealth;
+        if (currentHealth > maxHealth) currentHealth = maxHealth;
 
         lerpSpeed = 3f * Time.deltaTime;
+                      
+        // Initialize health display
+        currentHealth = player.GetCurrentHealth();
+        maxHealth = player.GetMaxHealth();
 
-        UpdateShaderBar();    
+
+        UpdateHealthBar();
+        HealthColour();
+        
     }
 
-    private void UpdateShaderBar()
+    public void Damage(int damagePoints)
     {
-        float targetValue = health / maxHealth;
-
-        float currentValue = hpMaterial.GetFloat(FlowProperty);
-        float newValue = Mathf.Lerp(currentValue, targetValue, lerpSpeed);//makes the smooth transition between values for the hp bar
-
-        hpMaterial.SetFloat(FlowProperty, newValue); //changes the value of the material so makes it go up or down
+        if (player != null)
+        {
+            player.TakeDamage(damagePoints);
+        }
+        else
+        {
+            currentHealth -= damagePoints;
+        }
     }
 
-    public void Damage(float damagePoints)
+    public void Heal(int healPoints)
     {
-        if (health > 0)
-            health -= damagePoints;
+        if (player != null)
+        {
+            player.Heal(healPoints);
+        }
+        else
+        {
+            currentHealth += healPoints;
+        }
     }
 
-    public void Heal(float healPoints)
+    void UpdateHealthBar()
     {
-        if (health < maxHealth)
-            health += healPoints;
+        if (healthBar != null && maxHealth > 0)
+        {
+            float targetFillAmount = (float)currentHealth / maxHealth;
+            healthBar.fillAmount = Mathf.Lerp(healthBar.fillAmount, targetFillAmount, lerpSpeed * Time.deltaTime);
+        }
+    }
+    
+    void HealthColour()
+    {
+        if (healthBar != null)
+        {
+            float healthPercentage = (float)currentHealth / maxHealth;
+            
+            if (healthPercentage <= colorChangeThreshold)
+            {
+                float t = healthPercentage / colorChangeThreshold;
+                healthBar.color = Color.Lerp(lowHealthColor, fullHealthColor, t);
+            }
+            else
+            {
+                healthBar.color = fullHealthColor;
+            }
+        }
     }
 
     public void Death()
     {
-        if (health <= 0)
+        if (currentHealth <= 0)
         {
             //SceneManager.LoadScene("Death Screen");
             print("You should be dead here ig");
+            //respawn
         }
+    }
+
+    public void Respawn()
+    {
+        
     }
 }
