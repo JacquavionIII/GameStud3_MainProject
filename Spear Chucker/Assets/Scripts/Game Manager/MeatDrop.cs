@@ -5,7 +5,7 @@ public class MeatDrop : MonoBehaviour, IPickUpAble
 {
     public float spawnTime = 20f; //how long the meat drop will be available for before it despawns
     private float timer;
-    public int meatAmount;
+    public PlayerMovement player;
     public UnityEvent OnPickedUp;
 
     private void OnEnable()
@@ -25,7 +25,7 @@ public class MeatDrop : MonoBehaviour, IPickUpAble
     public void OnPickUp()
     {
         print("yum yum in my tum tum");
-        meatAmount++;
+        player.meatAmount++;
         ObjectPool.Instance.ReturnToPool(this.gameObject);
         OnPickedUp?.Invoke();
     }

@@ -14,6 +14,10 @@ public class SpearToss : MonoBehaviour
     public Transform aimSource; //this is basicall what the shoot  position will use to determine what direction it will be rotated in
     private CinemachineImpulseSource source; //calling the impulse source
 
+    public enum ShootAxis { Forward, Right, Custom }
+    public ShootAxis shootAxis = ShootAxis.Forward;
+    public Vector3 customDirection = Vector3.forward; // local-space direction when using Custom
+
     private void Start()
     {
         source = GetComponent<CinemachineImpulseSource>();
@@ -41,7 +45,24 @@ public class SpearToss : MonoBehaviour
         if (spearHandler.spearAmount > 0)
         {
             GameObject temp = ObjectPool.Instance.SpawnFromPool(currentType, shootLocation.position, shootLocation.rotation);
-            temp.GetComponent<Rigidbody>().linearVelocity = shootLocation.forward * speed;
+            // temp.GetComponent<Rigidbody>().linearVelocity = shootLocation.forward * speed;
+
+            temp.transform.rotation = shootLocation.rotation;
+
+            Rigidbody rb = temp.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                Vector3 dir;
+                if (shootAxis == ShootAxis.Forward)
+                    dir = shootLocation.forward;
+                else if (shootAxis == ShootAxis.Right)
+                    dir = shootLocation.right; // local X axis
+                else
+                    dir = temp.transform.TransformDirection(customDirection.normalized);
+
+                rb.linearVelocity = dir.normalized * speed;
+            }
+
             temp.GetComponent<ObjectController>().Spawned();
 
             source.GenerateImpulse(Camera.main.transform.forward);

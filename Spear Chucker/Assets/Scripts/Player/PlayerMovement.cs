@@ -46,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
     public float rotationSpeed = 10f;
     private Vector3 velocity;               // Jump velocity
     private bool isGrounded;
+    public int meatAmount = 0;
 
     [Header("Input Actions")]
     private InputAction moveAction;         // Input action for movement
@@ -151,14 +152,14 @@ public class PlayerMovement : MonoBehaviour
     {
         if (context.performed)
         {
-            if (meat.meatAmount > 0)
+            if (meatAmount > 0)
             {
                 // I'll add better healing logic here later, just testing this for now
                 targetMeshRenderer.material = healMat;
                 Debug.Log("Heal action performed");
                 animator.SetBool("isHealing", true);
                 healVFX.gameObject.SetActive(true); // Activate healing VFX
-                meat.meatAmount--;
+                meatAmount--;
                 health.Heal(10);
             }
         }

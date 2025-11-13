@@ -15,6 +15,9 @@ public class Health : MonoBehaviour
     public float colorChangeThreshold = 0.3f;
     private float lerpSpeed = 3f;
 
+    [Header("References")]
+    public Transform spawnPoint;
+
 
     void Start()
     {
@@ -98,11 +101,26 @@ public class Health : MonoBehaviour
             //SceneManager.LoadScene("Death Screen");
             print("You should be dead here ig");
             //respawn
+            Respawn();
         }
     }
 
     public void Respawn()
     {
+        // Move player to spawn point position and rotation
+        transform.position = spawnPoint.position;
+        transform.rotation = spawnPoint.rotation;
+
+        // Reset physics if this object has a Rigidbody
+        Rigidbody rb = GetComponent<Rigidbody>();
+
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
         
+        currentHealth = maxHealth;
+
+        // Update UI immediately
+        UpdateHealthBar();
+        HealthColour();
     }
 }
